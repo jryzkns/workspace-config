@@ -1,0 +1,45 @@
+#!/usr/bin/python3
+
+from datetime import datetime
+import os
+import subprocess as sproc
+import time
+
+REST_INTERVAL = 3
+pipe_outputs = { "stdout" : sproc.PIPE,
+                 "stderr" : sproc.PIPE }
+
+def get_signature( fn ):
+    stat = os.stat( fn )
+    return f"{stat.st_size}-{stat.st_mtime}"
+
+def do_compile( fn, compile_cmd = "/usr/bin/pdflatex" ):
+    sproc.run( [ compile_cmd,
+                 "--halt-on-error",
+                 fn, ], **pipe_outputs )
+
+print( f"[{datetime.now()}] : autocompile server started" )
+
+last_known_sigs = { fn : get_signature( fn )
+                      for fn in os.listdir( "." )
+                      if fn.endswith( ".tex" ) }
+
+while True:
+    done_work = False
+    for fn in os.listdir( "." ):
+        if not fn.endswith( ".tex" ):
+            continue
+        file_sig = get_signature( fn )
+        if fn not in last_known_sigs:
+            last_known_sigs[ fn ] = ""
+        if last_known_sigs[ fn ] != file_sig:
+            print( f"[{datetime.now()}] : {fn} is newer; compiling... ", end="" )
+            do_compile( fn )
+            print( "done" )
+            last_known_sigs[ fn ] = file_sig
+            done_work = True
+    if done_work:
+        print( f"[{datetime.now()}] : cleaning up... ", end="" )
+        sproc.run([ "texclean" ], **pipe_outputs )
+        print( "done" )
+    time.sleep( REST_INTERVAL )

@@ -1,0 +1,16 @@
+#!/usr/bin/python3
+
+import os
+
+KILL_EXTS = ( 'aux',
+              'fdb_latexmk',
+              'log',
+              'fls',
+              'out',
+)
+
+for fn in os.listdir( '.' ):
+    ext = fn.split( '.' )[ -1 ]
+    if ext in KILL_EXTS:
+        print( f'deleting {fn}' )
+        os.remove( fn )
