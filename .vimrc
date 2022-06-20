@@ -15,4 +15,10 @@ match ExtraWhitespace /\s\+$/
 set tabstop=8 softtabstop=0 expandtab shiftwidth=4 smarttab
 
 set background=dark
+
 set nowrap
+
+set cursorline
+hi cursorline cterm=none term=none
+autocmd WinEnter * setlocal cursorline
+autocmd WinLeave * setlocal nocursorline
