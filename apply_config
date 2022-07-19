@@ -7,9 +7,7 @@ home_dir = os.path.expanduser( '~' )
 shutil.copytree( 'bin', f"{home_dir}/bin", dirs_exist_ok = True )
 
 shutil.copyfile( '.bash_aliases', f"{home_dir}/.bash_aliases" )
-shutil.copyfile( '.bash_login', f"{home_dir}/.bash_login" )
 shutil.copyfile( '.bash_profile', f"{home_dir}/.bash_profile" )
-
 
 shutil.copyfile( '.vimrc', f"{home_dir}/.vimrc" )
 shutil.copyfile( '.tmux.conf', f"{home_dir}/.tmux.conf" )
