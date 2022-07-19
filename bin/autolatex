@@ -13,6 +13,8 @@ def get_signature( fn ):
     stat = os.stat( fn )
     return f"{stat.st_size}-{stat.st_mtime}"
 
+# NOTE: pdflatex and friends requires at least
+# texlive, texlive-publishers from apt to work
 def do_compile( fn, compile_cmd = "/usr/bin/pdflatex" ):
     sproc.run( [ compile_cmd,
                  "--halt-on-error",
